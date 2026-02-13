@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Georgia', 'Palatino', serif;
+            background: linear-gradient(135deg, #0a0015 0%, #1a0520 50%, #2d0a3d 100%);
+        }
+
+        .photo-gallery {
+            position: fixed;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+            max-width: 90%;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .photo-track {
+            display: flex;
+            gap: 15px;
+            animation: scrollPhotos 40s linear infinite;
+        }
+
+        @keyframes scrollPhotos {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .photo-gallery:hover .photo-track {
+            animation-play-state: paused;
+        }
+
+        .photo-item {
+            flex-shrink: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(255, 105, 180, 0.3);
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+            animation: photoFadeIn 0.8s ease-out forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 3px solid rgba(255, 195, 216, 0.4);
+        }
+
+        .photo-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 12px 48px rgba(255, 105, 180, 0.6);
+            border-color: rgba(255, 195, 216, 0.8);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        @keyframes photoFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .message {
+            position: fixed;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            animation: fadeInDown 2s ease-out;
+        }
+
+        .message h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ff6b9d, #ffc3d8, #ff1493, #ff69b4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
+            animation: gradientShift 3s ease infinite, glow 2s ease-in-out infinite;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+        }
+
+        .message h2 {
+            font-size: 2.5rem;
+            color: #ffc3d8;
+            margin-top: 1rem;
+            text-shadow: 0 0 20px rgba(255, 195, 216, 0.6);
+            animation: fadeInUp 2s ease-out 0.5s backwards;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+        }
+
+        .lyrics-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+            max-width: 800px;
+            width: 90%;
+            max-height: 60vh;
+            overflow: hidden;
+            padding: 30px;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+        }
+
+        .lyrics-track {
+            animation: scrollLyrics 60s linear infinite;
+        }
+
+        @keyframes scrollLyrics {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        .lyric-line {
+            font-size: 1.4rem;
+            color: rgba(255, 195, 216, 0.9);
+            text-align: center;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: lyricFadeIn 1s ease-out forwards;
+            text-shadow: 0 2px 10px rgba(255, 105, 180, 0.4);
+            font-weight: 300;
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes lyricFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(255, 105, 180, 0.9));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message h2 {
+                font-size: 1.5rem;
+            }
+            .photo-item {
+                width: 90px;
+                height: 90px;
+            }
+            .lyric-line {
+                font-size: 1rem;
+                margin: 15px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="message">
+        <h1>Happy Valentine's Day</h1>
+        <h2>小欣妍</h2>
+    </div>
+
+    <div class="lyrics-container">
+        <div class="lyrics-track" id="lyricsContainer"></div>
+    </div>
+
+    <div class="photo-gallery">
+        <div class="photo-track" id="photoGallery"></div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="2.MP3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 播放背景音乐
+        const bgMusic = document.getElementById('bgMusic');
+        window.addEventListener('load', () => {
+            bgMusic.play().catch(e => {
+                // 如果自动播放被阻止，在用户交互后播放
+                document.addEventListener('click', () => {
+                    bgMusic.play();
+                }, { once: true });
+            });
+        });
+
+        // 歌词展示
+        const lyrics = [
+            '看最长的电影 听动人的旋律',
+            '和你一起 想去东京 飞到巴黎',
+            '我最最最爱的你 总让我如影随形',
+            '每当我想起你 在这秋风里 在这九月底',
+            '我想你能就这样靠在我身旁',
+            '时间 会做最好的决定',
+            '我想把你的世界全部都照亮',
+            '你穿过 泅涌的浪潮 抵达我 困困的孤岛',
+            '青春怎能奢求事事都圆满',
+            '好奇怪 总是会想起',
+            '我试着在了解 关于你关于你一切',
+            '时过境迁 还有我会在你身边',
+            '让我们 近一些 慢一些 甜一些'
+        ];
+
+        const lyricsContainer = document.getElementById('lyricsContainer');
+        
+        // 创建两组歌词实现无缝循环
+        const createLyricSet = () => {
+            lyrics.forEach((lyric, index) => {
+                const lyricLine = document.createElement('div');
+                lyricLine.className = 'lyric-line';
+                lyricLine.textContent = lyric;
+                lyricLine.style.animationDelay = `${3 + index * 0.3}s`;
+                lyricsContainer.appendChild(lyricLine);
+            });
+        };
+        
+        // 创建两组相同的歌词用于无缝循环
+        createLyricSet();
+        createLyricSet();
+
+        // 照片展示
+        const photos = [
+            '1/IMG_4671.JPG',
+            '1/IMG_8047.JPG',
+            '1/IMG_8048.JPG',
+            '1/IMG_8049.JPG',
+            '1/IMG_8050.JPG',
+            '1/IMG_8051.JPG',
+            '1/IMG_8052.JPG',
+            '1/IMG_8054.JPG',
+            '1/IMG_8055.JPG',
+            '1/IMG_8056.JPG',
+            '1/IMG_8057.JPG',
+            '1/IMG_8058.JPG',
+            '1/IMG_8059.JPG',
+            '1/IMG_8060.JPG',
+            '1/IMG_8061.JPG'
+        ];
+
+        const photoGallery = document.getElementById('photoGallery');
+        
+        // 创建两组照片实现无缝循环
+        const createPhotoSet = (startDelay = 0) => {
+            photos.forEach((photo, index) => {
+                const photoItem = document.createElement('div');
+                photoItem.className = 'photo-item';
+                photoItem.style.animationDelay = `${2 + startDelay + index * 0.15}s`;
+                
+                const img = document.createElement('img');
+                img.src = photo;
+                img.alt = `Memory ${index + 1}`;
+                
+                photoItem.appendChild(img);
+                photoGallery.appendChild(photoItem);
+            });
+        };
+        
+        // 创建两组相同的照片用于无缝循环
+        createPhotoSet(0);
+        createPhotoSet(0);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+            initHearts();
+        });
+
+        // 星星粒子系统
+        const stars = [];
+        const starCount = 200;
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.5;
+                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+                this.twinklePhase = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.twinklePhase += this.twinkleSpeed;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * twinkle})`;
+                ctx.fill();
+
+                // 星光效果
+                if (this.size > 1.5) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * twinkle * 0.2})`;
+                    ctx.fill();
+                }
+            }
+        }
+
+        // 爱心粒子系统
+        const hearts = [];
+        const heartCount = 15;
+
+        class Heart {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 50;
+                this.size = Math.random() * 30 + 20;
+                this.speedY = -(Math.random() * 1 + 0.5);
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.4 + 0.3;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+                this.pulsePhase = Math.random() * Math.PI * 2;
+                this.pulseSpeed = Math.random() * 0.03 + 0.02;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+                this.pulsePhase += this.pulseSpeed;
+
+                if (this.y < -100) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const pulse = Math.sin(this.pulsePhase) * 0.2 + 1;
+                const size = this.size * pulse;
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+
+                // 绘制爱心
+                ctx.beginPath();
+                ctx.moveTo(0, size * 0.3);
+                
+                // 左半边
+                ctx.bezierCurveTo(-size * 0.5, -size * 0.2, -size * 0.5, -size * 0.6, 0, -size * 0.3);
+                // 右半边
+                ctx.bezierCurveTo(size * 0.5, -size * 0.6, size * 0.5, -size * 0.2, 0, size * 0.3);
+
+                // 粉色渐变
+                const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
+                gradient.addColorStop(0, '#ff69b4');
+                gradient.addColorStop(0.5, '#ff1493');
+                gradient.addColorStop(1, '#ff6b9d');
+                
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // 爱心光晕
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#ff69b4';
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function initStars() {
+            stars.length = 0;
+            for (let i = 0; i < starCount; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function initHearts() {
+            hearts.length = 0;
+            for (let i = 0; i < heartCount; i++) {
+                const heart = new Heart();
+                heart.y = Math.random() * canvas.height;
+                hearts.push(heart);
+            }
+        }
+
+        // 鼠标交互
+        let mouseX = canvas.width / 2;
+        let mouseY = canvas.height / 2;
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('click', (e) => {
+            // 点击生成额外的爱心
+            for (let i = 0; i < 3; i++) {
+                const heart = new Heart();
+                heart.x = e.clientX + (Math.random() - 0.5) * 50;
+                heart.y = e.clientY + (Math.random() - 0.5) * 50;
+                heart.size = Math.random() * 40 + 30;
+                hearts.push(heart);
+            }
+        });
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 0, 21, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 更新和绘制星星
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            // 更新和绘制爱心
+            hearts.forEach(heart => {
+                heart.update();
+                heart.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        initStars();
+        initHearts();
+        animate();
+    </script>
+</body>
+</html>
